@@ -5,6 +5,7 @@ This file contains tests that I have actually reproduced on hardware.
 
 The scenarios are defined separately in `tests/scenarios.md`.
 
+
 A scenario stays unvalidated until I have run it on the ESP32 and recorded the result here.
 
 | Scenario                             | Date | Board / IDF | Result     | Notes |

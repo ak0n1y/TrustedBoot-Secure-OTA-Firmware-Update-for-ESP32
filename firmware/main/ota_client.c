@@ -157,8 +157,7 @@ static bool parse_manifest(const char *json, manifest_t *manifest)
     manifest->size = (size_t)size->valuedouble;
 
     if (mbedtls_base64_decode(manifest->signature, sizeof(manifest->signature), &manifest->signature_len,
-                              (const unsigned char *)signature->valuestring,
-                              strlen(signature->valuestring)) != 0) {
+                              (const unsigned char *)signature->valuestring, strlen(signature->valuestring)) != 0) {
         goto done;
     }
     ok = true;
@@ -182,6 +181,32 @@ static bool signature_valid(const uint8_t *digest, const uint8_t *signature, siz
     return rc == 0;
 }
 
+static bool firmware_version_matches_manifest(
+    const esp_partition_t *partition,
+    const manifest_t *manifest)
+{
+    esp_app_desc_t app_desc;
+
+    esp_err_t err = esp_ota_get_partition_description(partition, &app_desc);
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "cannot read downloaded firmware description: %s",
+                 esp_err_to_name(err));
+        return false;
+    }
+
+    ESP_LOGI(TAG, "manifest version: %s", manifest->version);
+    ESP_LOGI(TAG, "firmware version: %s", app_desc.version);
+
+    if (strcmp(app_desc.version, manifest->version) != 0) {
+        ESP_LOGE(TAG,
+            "version mismatch: manifest=%s firmware=%s",
+            manifest->version,
+            app_desc.version);
+        return false;
+    }
+
+    return true;
+}
 static ota_result_t download_and_install(const manifest_t *manifest, const esp_partition_t *target)
 {
     ota_result_t result = OTA_RESULT_ERROR;

@@ -1,0 +1,43 @@
+menu "Secure OTA"
+
+    config SOTA_WIFI_SSID
+        string "Wi-Fi SSID"
+        default "changeme"
+
+    config SOTA_WIFI_PASSWORD
+        string "Wi-Fi password"
+        default "changeme"
+
+    config SOTA_WIFI_CONNECT_TIMEOUT_S
+        int "Wi-Fi connection timeout (s)"
+        default 20
+
+    config SOTA_MANIFEST_URL
+        string "Manifest URL"
+        default "https://192.168.1.10:8443/manifest.json"
+
+    config SOTA_ALLOW_HTTP
+        bool "Allow plain HTTP for the firmware URL"
+        default n
+
+    config SOTA_CHECK_INTERVAL_S
+        int "Update check interval (s)"
+        default 60
+
+    config SOTA_HTTP_TIMEOUT_MS
+        int "HTTP timeout (ms)"
+        default 10000
+
+    config SOTA_SELF_TEST_MIN_FREE_HEAP
+        int "Minimum free heap for the self-test (bytes)"
+        default 40000
+
+    config SOTA_DEMO_FORCE_SELF_TEST_FAILURE
+        bool "Demo: force the self-test to fail"
+        default n
+
+    config SOTA_DEMO_CRASH_ON_BOOT
+        bool "Demo: crash before the image is validated"
+        default n
+
+endmenu
